@@ -50,8 +50,12 @@ normal = 0
 # Gathering all strings from file
 allStrings = open("temp.txt", "r").read().split('\n')
 
- # Lets get all suspicious strings
+# Lets get all suspicious strings
 susStrings = open("Systems/Android/suspicious.txt", "r").read().split('\n')
+
+# Queue
+global q
+q = queue.Queue()
 
 # Permission analyzer
 def Analyzer(parsed):
@@ -160,7 +164,7 @@ def LangNotFound():
       sys.exit(1)
 
 # APK string analyzer with NLP
-def Detailed(q):
+def Detailed():
     # Our sample string to analyze
     while not q.empty():
         targetString = q.get()
@@ -192,13 +196,8 @@ if __name__ == '__main__':
 
         # Strings side
         print(f"{infoS} Analyzing extracted strings from that file. Please wait...\n")
-
-        # Queue object
-
-        q = queue.Queue()
         
         #Thread Number
-        
         threadNumber = 0 
 
         for sus in susStrings:
@@ -208,7 +207,7 @@ if __name__ == '__main__':
         ts = []
         for i in range(0,threadNumber):
             try:
-                t = threading.Thread(target=Detailed, args=q)
+                t = threading.Thread(target=Detailed)
                 ts.append(t)
                 t.start()
             except Exception as e:
